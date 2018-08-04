@@ -96,14 +96,18 @@ class ELFFile:
 		if not self.elf_ident.is_valid_elf():
 			raise ValueError('指定されたファイルは正しい ELF ファイルではありません。')
 		self.elf_header = self.read_data_type(0, elf.Elf32_Ehdr, elf.Elf64_Ehdr)
-		try:
+		if True:
+			try:
+				self.read_program_headers()
+			except:
+				pass
+			try:
+				self.read_section_headers()
+			except:
+				pass
+		else:
 			self.read_program_headers()
-		except:
-			pass
-		try:
 			self.read_section_headers()
-		except:
-			pass
 
 	#  プログラムヘッダーの読み取り
 	def read_program_headers(self):
