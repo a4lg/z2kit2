@@ -11,7 +11,7 @@ z2kit2: セキュリティキャンプ 2018 (トラック Z2) 用簡易解析フ
 ```shell
 mkdir $Z2DIR
 cd $Z2DIR
-git clone https://github.com/a4lg/z2kit2 z2kit2
+git clone https://github.com/a4lg/z2kit2.git z2kit2
 ```
 
 このようにすれば、作業用ディレクトリで Python スクリプトを作る際、
