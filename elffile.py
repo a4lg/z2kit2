@@ -136,3 +136,33 @@ class ELFFile:
 			for i in range(self.elf_header.e_shnum):
 				t.append(self.read_data_type(self.elf_header.e_shoff + i * self.elf_header.e_shentsize, elf.Elf32_Shdr, elf.Elf64_Shdr))
 		self.section_headers = t
+
+	#  プログラムヘッダーによって指定されるアドレスの読み取り (ロードされない部分はゼロバイト埋め)
+	def read_by_vaddr(self, vaddr, length):
+		if length == 0:
+			return b''
+		vendp = vaddr + length
+		data = bytearray(length)
+		for loadinfo in self.program_loadinfo:
+			# TODO: p_align のハンドリング
+			off = loadinfo.p_vaddr - vaddr
+			p1 = loadinfo.p_vaddr
+			p2 = loadinfo.p_vaddr + loadinfo.p_filesz
+			p3 = loadinfo.p_vaddr + loadinfo.p_memsz
+			p1 -= vaddr
+			p2 -= vaddr
+			p3 -= vaddr
+			if p1 < 0:
+				p1 = 0
+			if p3 > length:
+				p3 = length
+			if p2 < 0:
+				p2 = 0
+			elif p2 > length:
+				p2 = length
+			if p3 <= 0 or length <= p1 or p1 == p3:
+				continue
+			data[p1:p2] = self.read_data_anyway(loadinfo.p_offset + p1 - off, p2 - p1)
+			for i in range(p2, p3):
+				data[i] = 0
+		return bytes(data)
