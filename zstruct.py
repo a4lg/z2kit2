@@ -280,7 +280,7 @@ def zstruct(*args, **kwargs):
 			xarray  = self.__struct_array__
 			xlen = max([len(x) if x else 1 for x in xnames])
 			fmt0 = '\t{0:' + str(xlen) + 's} = '
-			s = str(type(self)) + ' {\n'
+			s = type(self).__name__ + ' {\n'
 			for i in range(len(xnames)):
 				if not xnames[i]:
 					continue
