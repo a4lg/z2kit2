@@ -24,7 +24,7 @@
 #	Portions of the code is based on elf.h from the GNU C Library
 #	but I'm not complying with GNU LGPL, the original license.
 #	This is because elf.h only defines common semantics and common
-#	constants, neither can be copyright-applicable.
+#	constants, neither can be copyright-applicable (in general).
 #
 #
 from . import zstruct
