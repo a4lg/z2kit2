@@ -112,7 +112,7 @@ class ELFFile:
 	#  プログラムヘッダーの読み取り
 	def read_program_headers(self):
 		self.program_headers  = None
-		self.program_loadinfo = None
+		self.program_loadinfo = []
 		ptype = self.get_data_type(elf.Elf32_Phdr, elf.Elf64_Phdr)
 		t = []
 		if self.elf_header.e_phoff != 0 and self.elf_header.e_phnum > 0:
