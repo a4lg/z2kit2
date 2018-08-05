@@ -136,3 +136,13 @@ class ELFFile:
 			for i in range(self.elf_header.e_shnum):
 				t.append(self.read_data_type(self.elf_header.e_shoff + i * self.elf_header.e_shentsize, elf.Elf32_Shdr, elf.Elf64_Shdr))
 		self.section_headers = t
+
+	#  プログラムヘッダーによって指定されるアドレスの読み取り (ロードされない部分はゼロバイト埋め)
+	def read_by_vaddr(self, vaddr, length):
+		if length == 0:
+			return b''
+		vendp = vaddr + length
+		data = bytearray(length)
+		for loadinfo in self.program_loadinfo:
+			pass
+		raise NotImplementedError('このメソッドは課題実装用のテンプレートです。')
