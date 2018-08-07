@@ -113,6 +113,8 @@ class ELFFile:
 	def read_program_headers(self):
 		self.program_headers  = None
 		self.program_loadinfo = []
+		self.dynamic_header   = None
+		self.dynamic_headers  = {}
 		ptype = self.get_data_type(elf.Elf32_Phdr, elf.Elf64_Phdr)
 		t = []
 		if self.elf_header.e_phoff != 0 and self.elf_header.e_phnum > 0:
@@ -122,8 +124,24 @@ class ELFFile:
 				t.append(self.read_data_type(self.elf_header.e_phoff + i * self.elf_header.e_phentsize, elf.Elf32_Phdr, elf.Elf64_Phdr))
 		self.program_headers = t
 		self.__init_loadinfo()
+		self.__init_dynamic()
 	def __init_loadinfo(self):
 		self.program_loadinfo = [x for x in self.program_headers if x.p_type == elf.PT_LOAD]
+
+	#  動的リンクヘッダーの読み取り
+	def __init_dynamic(self):
+		for ph in self.program_headers:
+			if ph.p_type != elf.PT_DYNAMIC:
+				continue
+			self.dynamic_header = ph
+			ptype = self.get_data_type(elf.Elf32_Dyn, elf.Elf64_Dyn)
+			plen  = ptype.struct_length
+			for i in range(ph.p_memsz // plen):
+				d = ptype.init_from(self.read_by_vaddr(ph.p_vaddr + i * plen, plen))
+				self.dynamic_headers[d.d_tag] = d.d_val
+				if d.d_tag == elf.DT_NULL:
+					break
+			return
 
 	#  セクションヘッダーの読み取り
 	def read_section_headers(self):
