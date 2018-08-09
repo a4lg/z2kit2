@@ -184,3 +184,22 @@ class ELFFile:
 			for i in range(p2, p3):
 				data[i] = 0
 		return bytes(data)
+
+	#  ヌル終端文字列の読み取り
+	def __read_string_by_addr(self, addr, readfunc):
+		BUFFER_SIZE = 256
+		s = bytearray()
+		while True:
+			d = readfunc(addr, BUFFER_SIZE)
+			addr += BUFFER_SIZE
+			i = d.find(b'\0')
+			if i == -1:
+				s.extend(d)
+			else:
+				s.extend(d[0:i])
+				break
+		return bytes(s)
+	def read_string_by_offset(self, offset):
+		return self.__read_string_by_addr(offset, self.read_data_anyway)
+	def read_string_by_vaddr(self, vaddr):
+		return self.__read_string_by_addr(offset, self.read_by_vaddr)
