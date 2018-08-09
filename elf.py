@@ -374,6 +374,20 @@ class Elf64_Ehdr(__Elf_Ehdr_impl):
 #
 ########################################################################
 
+#  セクションヘッダーの特別なインデックス
+SHN_UNDEF     = 0x0000
+SHN_LORESERVE = 0xff00
+SHN_LOPROC    = 0xff00
+SHN_BEFORE    = 0xff00
+SHN_AFTER     = 0xff01
+SHN_HIPROC    = 0xff1f
+SHN_LOOS      = 0xff20
+SHN_HIOS      = 0xff3f
+SHN_ABS       = 0xfff1
+SHN_COMMON    = 0xfff2
+SHN_XINDEX    = 0xffff
+SHN_HIRESERVE = 0xffff
+
 #  sh_type
 SHT_NULL          =  0
 SHT_PROGBITS      =  1
