@@ -159,7 +159,6 @@ class ELFFile:
 	def read_by_vaddr(self, vaddr, length):
 		if length == 0:
 			return b''
-		vendp = vaddr + length
 		data = bytearray(length)
 		for loadinfo in self.program_loadinfo:
 			# TODO: p_align のハンドリング
