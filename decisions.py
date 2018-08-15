@@ -68,7 +68,7 @@ class FuzzyHashMatchDecision(Decision):
 	def __init__(self, fuzzyhash, threshold):
 		self.fuzzyhash = fuzzyhash
 		self.threshold = threshold
-		self.feature   = LstrfuzzyFeature()
+		self.feature   = FuzzyHashFeature()
 	def decide(self, data):
 		# (TODO)
 		pass #(TODO:この行は課題完成時に削除すること)
