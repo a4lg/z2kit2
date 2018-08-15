@@ -52,3 +52,23 @@ class BinStringDecision(Decision):
 	def decide(self, data):
 		x = data.data.find(self.pattern)
 		return x != -1
+
+class LstrfuzzyMatchDecision(Decision):
+	def __init__(self, fuzzyhash, threshold):
+		self.fuzzyhash = fuzzyhash
+		self.threshold = threshold
+		self.feature   = LstrfuzzyFeature()
+	def decide(self, data):
+		feature = self.feature.#(TODO)
+		if not feature:
+			return False
+		# (TODO)
+
+class FuzzyHashMatchDecision(Decision):
+	def __init__(self, fuzzyhash, threshold):
+		self.fuzzyhash = fuzzyhash
+		self.threshold = threshold
+		self.feature   = LstrfuzzyFeature()
+	def decide(self, data):
+		# (TODO)
+		pass #(TODO:この行は課題完成時に削除すること)
