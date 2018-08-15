@@ -59,10 +59,10 @@ class LstrfuzzyMatchDecision(Decision):
 		self.threshold = threshold
 		self.feature   = LstrfuzzyFeature()
 	def decide(self, data):
-		feature = self.feature.#(TODO)
+		feature = self.feature.get_feature(data)
 		if not feature:
 			return False
-		# (TODO)
+		return ssdeep.compare(feature, self.fuzzyhash) > self.threshold
 
 class FuzzyHashMatchDecision(Decision):
 	def __init__(self, fuzzyhash, threshold):
@@ -70,5 +70,7 @@ class FuzzyHashMatchDecision(Decision):
 		self.threshold = threshold
 		self.feature   = FuzzyHashFeature()
 	def decide(self, data):
-		# (TODO)
-		pass #(TODO:この行は課題完成時に削除すること)
+		feature = self.feature.get_feature(data)
+		if not feature:
+			return False
+		return ssdeep.compare(feature, self.fuzzyhash) > self.threshold
