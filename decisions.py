@@ -23,6 +23,7 @@
 #
 #
 import json
+import ssdeep
 from .decision import Decision
 from .features import *
 
