@@ -22,3 +22,17 @@
 #	PERFORMANCE OF THIS SOFTWARE.
 #
 #
+import ssdeep
+from . import elf
+
+class LstrfuzzyFeature:
+	def get_feature(self, data):
+		# 動的リンクされた ELF ファイルでない限り、None を返す
+		if not data.elffile:
+			return None
+		if elf.DT_STRTAB not in data.elffile.dynamic_headers:
+			return None
+		if elf.DT_STRSZ not in data.elffile.dynamic_headers:
+			return None
+		# 文字列テーブルの ssdeep ハッシュを取る
+		return ssdeep.hash(data.elffile.read_by_vaddr(data.elffile.dynamic_headers[elf.DT_STRTAB], data.elffile.dynamic_headers[elf.DT_STRSZ]))
