@@ -22,8 +22,9 @@
 #	PERFORMANCE OF THIS SOFTWARE.
 #
 #
+import abc
 
-class Decision:
-	@abstractmethod
+class Decision(metaclass=abc.ABCMeta):
+	@abc.abstractmethod
 	def decide(self, data):
 		raise NotImplementedError()
