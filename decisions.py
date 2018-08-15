@@ -45,3 +45,10 @@ class VTDetectionNameDecision(Decision):
 		if not scan['scans'][self.softwareName]['detected']:
 			return False
 		return scan['scans'][self.softwareName]['result'] == self.detectionName
+
+class BinStringDecision(Decision):
+	def __init__(self, pattern):
+		self.pattern = pattern
+	def decide(self, data):
+		x = data.data.find(self.pattern)
+		return x != -1
