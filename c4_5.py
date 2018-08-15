@@ -29,11 +29,41 @@ class C4_5DecisionBranch:
 		self.gainratio = None
 		self.branch0 = None
 		self.branch1 = None
+	def to_json_object(self):
+		o = {}
+		o['idx'] = self.idx
+		if self.gainratio is not None:
+			o['gainratio'] = self.gainratio
+		o['b0'] = self.branch0.to_json_object()
+		o['b1'] = self.branch1.to_json_object()
+		return o
+	@staticmethod
+	def from_json_object(obj):
+		if ('idx' not in obj) and ('value' in obj):
+			return C4_5DecisionLeaf.from_json_object(obj)
+		branch = C4_5DecisionBranch(obj['idx'])
+		if 'gainratio' in branch:
+			branch.gainratio = obj['gainratio']
+		branch.branch0 = C4_5DecisionBranch.from_json_object(obj['b0'])
+		branch.branch1 = C4_5DecisionBranch.from_json_object(obj['b1'])
+		return branch
 
 class C4_5DecisionLeaf:
 	def __init__(self, value):
 		self.value = value
 		self.reliability = 1.0
+	def to_json_object(self):
+		o = {}
+		o['value'] = self.value
+		if self.reliability != 1.0:
+			o['reliability'] = self.reliability
+		return o
+	@staticmethod
+	def from_json_object(obj):
+		leaf = C4_5DecisionLeaf(obj['value'])
+		if 'reliability' in obj:
+			leaf.reliability = obj['reliability']
+		return leaf
 
 class C4_5DecisionLearner:
 	def __init__(self, teacherObject, decisionObjects):
