@@ -22,5 +22,25 @@
 #	PERFORMANCE OF THIS SOFTWARE.
 #
 #
+import json
 from .decision import Decision
 from .features import *
+
+class VTDetectionNameDecision(Decision):
+	def __init__(self, scansFile, softwareName, detectionName):
+		self.scans = {}
+		with open(scansFile, 'r', encoding='utf-8') as f:
+			scans = json.load(f)
+			for scan in scans:
+				self.scans[scan['sha256']] = scan
+		self.softwareName  = softwareName
+		self.detectionName = detectionName
+	def decide(self, data):
+		if data.sha256 not in self.scans:
+			return False
+		scan = self.scans[data.sha256]
+		if self.softwareName not in scan['scans']:
+			return False
+		if not scan['scans'][self.softwareName]['detected']:
+			return False
+		return scan['scans'][self.softwareName]['result'] == self.detectionName
