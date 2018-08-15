@@ -36,3 +36,7 @@ class LstrfuzzyFeature:
 			return None
 		# 文字列テーブルの ssdeep ハッシュを取る
 		return ssdeep.hash(data.elffile.read_by_vaddr(data.elffile.dynamic_headers[elf.DT_STRTAB], data.elffile.dynamic_headers[elf.DT_STRSZ]))
+
+class FuzzyHashFeature:
+	def get_feature(self, data):
+		return ssdeep.hash(data.data)
