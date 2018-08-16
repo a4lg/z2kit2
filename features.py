@@ -22,6 +22,7 @@
 #	PERFORMANCE OF THIS SOFTWARE.
 #
 #
+import math
 import ssdeep
 from . import elf
 
@@ -63,3 +64,17 @@ class StringsFeature:
 			else:
 				feature[s] += 1
 		return feature
+
+class FileEntropyFeature:
+	def get_feature(self, data):
+		entropy = 0
+		counts = [ 0 ] * 256
+		for ch in data.data:
+			counts[ch] += 1
+		total = len(data.data)
+		for i in range(256):
+			p = float(counts[i]) / total
+			if p == 0:
+				continue
+			entropy -= p * math.log2(p)
+		return entropy
