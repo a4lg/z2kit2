@@ -88,14 +88,16 @@ class StringsDecisionFast(Decision):
 		self.match = match.encode('ASCII')
 		self.matchlen = len(self.match)
 	def decide(self, data):
-		x = data.data.find(self.match)
-		if x == -1:
-			return False
-		if x > 0 and data.data[x-1] >= 0x20 and data.data[x-1] < 0x7f:
-			return False
-		if x + self.matchlen < len(data.data) and data.data[x+self.matchlen] >= 0x20 and data.data[x+self.matchlen] < 0x7f:
-			return False
-		return True
+		x = -1
+		while True:
+			x = data.data.find(self.match, x + 1)
+			if x == -1:
+				return False
+			if x > 0 and data.data[x-1] >= 0x20 and data.data[x-1] < 0x7f:
+				continue
+			if x + self.matchlen < len(data.data) and data.data[x+self.matchlen] >= 0x20 and data.data[x+self.matchlen] < 0x7f:
+				continue
+			return True
 
 class PartialStringsDecisionFast(Decision):
 	def __init__(self, match):
