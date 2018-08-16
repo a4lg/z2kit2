@@ -137,7 +137,7 @@ class ELFFile:
 			ptype = self.get_data_type(elf.Elf32_Dyn, elf.Elf64_Dyn)
 			plen  = ptype.struct_length
 			for i in range(ph.p_memsz // plen):
-				d = ptype.init_from(self.read_by_vaddr(ph.p_vaddr + i * plen, plen))
+				d = ptype.init_from(self.read_by_vaddr(ph.p_vaddr + i * plen, plen), endian=self.elf_ident_endian)
 				self.dynamic_headers[d.d_tag] = d.d_val
 				if d.d_tag == elf.DT_NULL:
 					break
