@@ -104,3 +104,31 @@ class PartialStringsDecisionFast(Decision):
 		self.match = match.encode('ASCII')
 	def decide(self, data):
 		return data.data.find(self.match) != -1
+
+
+class DecisionCombination_AND(Decision):
+	def __init__(self, d1, d2):
+		self.d1 = d1
+		self.d2 = d2
+	def decide(self, data):
+		return self.d1.decide(data) and self.d2.decide(data)
+
+class DecisionCombination_OR(Decision):
+	def __init__(self, d1, d2):
+		self.d1 = d1
+		self.d2 = d2
+	def decide(self, data):
+		return self.d1.decide(data) or self.d2.decide(data)
+
+class DecisionCombination_XOR(Decision):
+	def __init__(self, d1, d2):
+		self.d1 = d1
+		self.d2 = d2
+	def decide(self, data):
+		return self.d1.decide(data) ^ self.d2.decide(data)
+
+class DecisionCombination_NOT(Decision):
+	def __init__(self, decision):
+		self.decision = decision
+	def decide(self, data):
+		return not self.decision.decide(data)
