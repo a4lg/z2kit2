@@ -74,3 +74,11 @@ class FuzzyHashMatchDecision(Decision):
 		if not feature:
 			return False
 		return ssdeep.compare(feature, self.fuzzyhash) > self.threshold
+
+class StringsExistenceDecision(Decision):
+	def __init__(self, match):
+		self.match   = match
+		self.feature = StringsFeature()
+	def decide(self, data):
+		feature = self.feature.get_feature(data)
+		return (self.match in feature)

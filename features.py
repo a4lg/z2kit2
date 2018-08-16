@@ -40,3 +40,26 @@ class LstrfuzzyFeature:
 class FuzzyHashFeature:
 	def get_feature(self, data):
 		return ssdeep.hash(data.data)
+
+class StringsFeature:
+	def get_feature(self, data):
+		feature = {}
+		s = bytearray()
+		for ch in data.data:
+			if ch >= 0x20 and ch < 0x7f:
+				s.append(ch)
+			else:
+				if len(s) >= 4:
+					s = bytes(s)
+					if s not in feature:
+						feature[s] = 1
+					else:
+						feature[s] += 1
+				s = bytearray()
+		if len(s) >= 4:
+			s = bytes(s)
+			if s not in feature:
+				feature[s] = 1
+			else:
+				feature[s] += 1
+		return feature
