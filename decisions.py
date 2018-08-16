@@ -86,6 +86,19 @@ class StringsExistenceDecision(Decision):
 class StringsDecisionFast(Decision):
 	def __init__(self, match):
 		self.match = match.encode('ASCII')
+		self.matchlen = len(self.match)
 	def decide(self, data):
 		x = data.data.find(self.match)
-		return x != -1
+		if x == -1:
+			return False
+		if x > 0 and data.data[x-1] >= 0x20 and data.data[x-1] < 0x7f:
+			return False
+		if x + self.matchlen < len(data.data) and data.data[x+self.matchlen] >= 0x20 and data.data[x+self.matchlen] < 0x7f:
+			return False
+		return True
+
+class PartialStringsDecisionFast(Decision):
+	def __init__(self, match):
+		self.match = match.encode('ASCII')
+	def decide(self, data):
+		return data.data.find(self.match) != -1
