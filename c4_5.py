@@ -92,7 +92,7 @@ class C4_5DecisionLearner:
 		n = n0 + n1
 		p0 = float(n0) / n
 		p1 = 1.0 - p0
-		return -(p0 * math.log(p0,2) + p1 * math.log(p1,2))
+		return -((0 if p0 == 0 else p0 * math.log2(p0)) + (0 if p1 == 0 else p1 * math.log2(p1)))
 	def __make_tree_element(self, data, used_):
 		used = set(used_)
 		ndecider = len(data[0]) - 1
