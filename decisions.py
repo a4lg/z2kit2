@@ -82,3 +82,10 @@ class StringsExistenceDecision(Decision):
 	def decide(self, data):
 		feature = self.feature.get_feature(data)
 		return (self.match in feature)
+
+class StringsDecisionFast(Decision):
+	def __init__(self, match):
+		self.match = match.encode('ASCII')
+	def decide(self, data):
+		x = data.data.find(self.match)
+		return x != -1
