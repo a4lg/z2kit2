@@ -22,6 +22,7 @@
 #	PERFORMANCE OF THIS SOFTWARE.
 #
 #
+import math
 
 class C4_5DecisionBranch:
 	def __init__(self, idxOfDecider):
@@ -83,13 +84,15 @@ class C4_5DecisionLearner:
 		if self.decisionObjects is None or len(self.decisionObjects) == 0:
 			raise ValueError("学習のためには、決定器オブジェクトの (空でない) 配列を与える必要があります。")
 		self.learnedData = []
-		for data for inputs:
+		for data in inputs:
 			decideArray = [ self.teacherObject.decide(data) ]
 			for dec in self.decisionObjects:
 				decideArray.append(dec.decide(data))
 			self.learnedData.append(decideArray)
 	def __impurity(self, n0, n1):
 		n = n0 + n1
+		if n == 0:
+			return 0.0
 		p0 = float(n0) / n
 		p1 = 1.0 - p0
 		return -((0 if p0 == 0 else p0 * math.log2(p0)) + (0 if p1 == 0 else p1 * math.log2(p1)))
@@ -142,7 +145,7 @@ class C4_5DecisionLearner:
 			# 情報ゲイン (不純度を減らせる量) の計算
 			gain_decider = impurity_teacher - impurity_decider
 			# 情報ゲイン比の計算 (分割そのものの不純度による情報ゲインの正規化)
-			splitinfo_decider = self.__impurity(count0x, count1x)
+			splitinfo_decider = self.__impurity(count0x, count1x) + 0.001
 			gainratio_decider = gain_decider / splitinfo_decider
 			# 情報ゲイン比が最大になるものを選択
 			if mgainrat is None or gainratio_decider > mgainrat:
@@ -154,7 +157,7 @@ class C4_5DecisionLearner:
 				t_count11 = count11
 		# 分割ノードを生成
 		used.add(isplit)
-		element = C4_5DecisionNode(isplit - 1)
+		element = C4_5DecisionBranch(isplit - 1)
 		element.gainratio = mgainrat
 		# これ以上分割できない場合、正解率の高い方を適当に選ぶ
 		if len(used) == ndecider:
