@@ -132,3 +132,9 @@ class DecisionCombination_NOT(Decision):
 		self.decision = decision
 	def decide(self, data):
 		return not self.decision.decide(data)
+
+class ConstantDecision(Decision):
+	def __init__(self, value):
+		self.value = value
+	def decide(self, data):
+		return self.value
