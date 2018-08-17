@@ -25,14 +25,17 @@
 import math
 
 class C4_5DecisionBranch:
-	def __init__(self, idxOfDecider):
+	def __init__(self, idxOfDecider, reprOfDecider=None):
 		self.idx = idxOfDecider
+		self.drepr = reprOfDecider
 		self.gainratio = None
 		self.branch0 = None
 		self.branch1 = None
 	def to_json_object(self):
 		o = {}
 		o['idx'] = self.idx
+		if self.drepr is not None:
+			o['decider'] = self.drepr
 		if self.gainratio is not None:
 			o['gainratio'] = self.gainratio
 		o['b0'] = self.branch0.to_json_object()
@@ -157,7 +160,7 @@ class C4_5DecisionLearner:
 				t_count11 = count11
 		# 分割ノードを生成
 		used.add(isplit)
-		element = C4_5DecisionBranch(isplit - 1)
+		element = C4_5DecisionBranch(isplit - 1, repr(self.decisionObjects[isplit - 1]))
 		element.gainratio = mgainrat
 		# これ以上分割できない場合、正解率の高い方を適当に選ぶ
 		if len(used) == ndecider:
