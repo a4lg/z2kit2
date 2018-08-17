@@ -162,8 +162,8 @@ class C4_5DecisionLearner:
 		used.add(isplit)
 		element = C4_5DecisionBranch(isplit - 1, repr(self.decisionObjects[isplit - 1]))
 		element.gainratio = mgainrat
-		# これ以上分割できない場合、正解率の高い方を適当に選ぶ
-		if len(used) == ndecider:
+		# これ以上分割できないかもう有用な分類がない場合、正解率の高い方を適当に選ぶ
+		if len(used) == ndecider or mgainrat == 0.0:
 			if t_count00 + t_count11 >= t_count01 + t_count10:
 				element.branch0 = C4_5DecisionLeaf(False)
 				element.branch1 = C4_5DecisionLeaf(True)
