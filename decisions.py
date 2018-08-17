@@ -45,6 +45,8 @@ class VTDetectionNameDecision(Decision):
 		if not scan['scans'][self.softwareName]['detected']:
 			return False
 		return scan['scans'][self.softwareName]['result'] == self.detectionName
+	def __repr__(self):
+		return 'VTDetectionNameDecision(<...>, {}, {})'.format(repr(self.softwareName), repr(self.detectionName))
 
 class BinStringDecision(Decision):
 	def __init__(self, pattern):
@@ -52,6 +54,8 @@ class BinStringDecision(Decision):
 	def decide(self, data):
 		x = data.data.find(self.pattern)
 		return x != -1
+	def __repr__(self):
+		return 'BinStringDecision({})'.format(repr(self.pattern))
 
 class LstrfuzzyMatchDecision(Decision):
 	def __init__(self, fuzzyhash, threshold):
@@ -63,6 +67,8 @@ class LstrfuzzyMatchDecision(Decision):
 		if not feature:
 			return False
 		return ssdeep.compare(feature, self.fuzzyhash) > self.threshold
+	def __repr__(self):
+		return 'LstrfuzzyMatchDecision({}, {})'.format(repr(self.fuzzyhash), repr(self.threshold))
 
 class FuzzyHashMatchDecision(Decision):
 	def __init__(self, fuzzyhash, threshold):
@@ -74,6 +80,8 @@ class FuzzyHashMatchDecision(Decision):
 		if not feature:
 			return False
 		return ssdeep.compare(feature, self.fuzzyhash) > self.threshold
+	def __repr__(self):
+		return 'FuzzyHashMatchDecision({}, {})'.format(repr(self.fuzzyhash), repr(self.threshold))
 
 class StringsExistenceDecision(Decision):
 	def __init__(self, match):
@@ -82,6 +90,8 @@ class StringsExistenceDecision(Decision):
 	def decide(self, data):
 		feature = self.feature.get_feature(data)
 		return (self.match in feature)
+	def __repr__(self):
+		return 'StringsExistenceDecision({})'.format(repr(self.match))
 
 class StringsDecisionFast(Decision):
 	def __init__(self, match):
@@ -98,12 +108,16 @@ class StringsDecisionFast(Decision):
 			if x + self.matchlen < len(data.data) and data.data[x+self.matchlen] >= 0x20 and data.data[x+self.matchlen] < 0x7f:
 				continue
 			return True
+	def __repr__(self):
+		return 'StringsDecisionFast({})'.format(repr(self.match))
 
 class PartialStringsDecisionFast(Decision):
 	def __init__(self, match):
 		self.match = match.encode('ASCII')
 	def decide(self, data):
 		return data.data.find(self.match) != -1
+	def __repr__(self):
+		return 'PartialStringsDecisionFast({})'.format(repr(self.match))
 
 
 class DecisionCombination_AND(Decision):
@@ -112,6 +126,8 @@ class DecisionCombination_AND(Decision):
 		self.d2 = d2
 	def decide(self, data):
 		return self.d1.decide(data) and self.d2.decide(data)
+	def __repr__(self):
+		return 'DecisionCombination_AND({}, {})'.format(repr(self.d1), repr(self.d2))
 
 class DecisionCombination_OR(Decision):
 	def __init__(self, d1, d2):
@@ -119,6 +135,8 @@ class DecisionCombination_OR(Decision):
 		self.d2 = d2
 	def decide(self, data):
 		return self.d1.decide(data) or self.d2.decide(data)
+	def __repr__(self):
+		return 'DecisionCombination_OR({}, {})'.format(repr(self.d1), repr(self.d2))
 
 class DecisionCombination_XOR(Decision):
 	def __init__(self, d1, d2):
@@ -126,15 +144,21 @@ class DecisionCombination_XOR(Decision):
 		self.d2 = d2
 	def decide(self, data):
 		return self.d1.decide(data) ^ self.d2.decide(data)
+	def __repr__(self):
+		return 'DecisionCombination_XOR({}, {})'.format(repr(self.d1), repr(self.d2))
 
 class DecisionCombination_NOT(Decision):
 	def __init__(self, decision):
 		self.decision = decision
 	def decide(self, data):
 		return not self.decision.decide(data)
+	def __repr__(self):
+		return 'DecisionCombination_NOT({})'.format(repr(self.decision))
 
 class ConstantDecision(Decision):
 	def __init__(self, value):
 		self.value = value
 	def decide(self, data):
 		return self.value
+	def __repr__(self):
+		return 'ConstantDecision({})'.format(repr(self.value))
