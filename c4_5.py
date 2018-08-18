@@ -183,7 +183,7 @@ class C4_5DecisionLearner:
 		elif t_count11 == 0:
 			element.branch1 = C4_5DecisionLeaf(False)
 		else:
-			element.branch1 = self.__make_tree_element([x for x in data if x[isplit] == False], used)
+			element.branch1 = self.__make_tree_element([x for x in data if x[isplit] == True], used)
 		return element
 	def make_decision_tree(self):
 		if self.learnedData is None:
