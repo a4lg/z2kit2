@@ -109,7 +109,7 @@ class StringsDecisionFast(Decision):
 				continue
 			return True
 	def __repr__(self):
-		return 'StringsDecisionFast({})'.format(repr(self.match))
+		return 'StringsDecisionFast({})'.format(repr(self.match.decode('ASCII')))
 
 class PartialStringsDecisionFast(Decision):
 	def __init__(self, match):
@@ -117,7 +117,7 @@ class PartialStringsDecisionFast(Decision):
 	def decide(self, data):
 		return data.data.find(self.match) != -1
 	def __repr__(self):
-		return 'PartialStringsDecisionFast({})'.format(repr(self.match))
+		return 'PartialStringsDecisionFast({})'.format(repr(self.match.decode('ASCII')))
 
 
 class DecisionCombination_AND(Decision):
